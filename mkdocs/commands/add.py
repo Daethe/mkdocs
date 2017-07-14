@@ -119,24 +119,31 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
     if not tpl_config is None:
         var_lists = re.findall(r'{{[A-Za-z0-9\-\_]+}}', tpl_value)
         for var in var_lists:
-            var_value = __parse_keyword(tpl_config, var[2:-2], filename)
-            tpl_value = re.sub(var, var_value, tpl_value)
+            var_value = __parse_keyword(
+                tpl_config[var[2:-2]],
+                filename
+            )
+            tpl_value = re.sub(
+                var,
+                var_value,
+                tpl_value
+            )
     # End Test
 
     io.open(file_path, 'w', encoding='utf-8').write(tpl_value)
     return
 
 
-def __parse_keyword(tpl_config, var_config, filename):
+def __parse_keyword(tpl_config, filename):
     keywords = ['filename', 'datetime', 'date']
 
-    if tpl_config[var_config] in keywords:
-        if tpl_config[var_config] == 'filename':
+    if tpl_config in keywords:
+        if tpl_config == 'filename':
             return filename
-        if tpl_config[var_config] == 'datetime':
+        if tpl_config == 'datetime':
             return str(datetime.now())
-        if tpl_config[var_config] == 'date':
+        if tpl_config == 'date':
             return str(date.today())
 
-    return tpl_config[var_config]
+    return tpl_config
             
