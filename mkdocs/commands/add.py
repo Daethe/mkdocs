@@ -79,14 +79,14 @@ def add(tpl_name, output_dir, filename, create_dir, tpl_dir):
         output_dir = join('docs', output_dir)
         file_path = join(output_dir, str(filename) + '.md')
 
-        if __check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
-            __write_file(tpl_path, file_path, __get_config_file(tpl_dir, tpl_name), filename)
+        if _check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
+            _write_file(tpl_path, file_path, _get_config_file(tpl_dir, tpl_name), filename)
             log.info('The file was successfully created in ' + file_path)
 
     return
 
 
-def __get_config_file(tpl_dir, tpl_name):
+def _get_config_file(tpl_dir, tpl_name):
     data = yaml.load(
         io.open(join(tpl_dir, '_config.yml'), 'r')
     )
@@ -95,7 +95,7 @@ def __get_config_file(tpl_dir, tpl_name):
     return None
 
 
-def __check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
+def _check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
     """
         Check existance or not of folder/file
     """
@@ -110,7 +110,7 @@ def __check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
     return everything_is_ok
 
 
-def __write_file(tpl_path, file_path, tpl_config, filename):
+def _write_file(tpl_path, file_path, tpl_config, filename):
     """
         Write template content to file
     """
@@ -120,7 +120,7 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
     if tpl_config is not None:
         var_lists = re.findall(r'{{[A-Za-z0-9\-\_]+}}', tpl_value)
         for var in var_lists:
-            var_value = __parse_keyword(
+            var_value = _parse_keyword(
                 tpl_config[var[2:-2]],
                 filename
             )
@@ -135,12 +135,12 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
     return
 
 
-def __parse_keyword(tpl_config, filename):
+def _parse_keyword(tpl_config, filename):
     types = ['date', 'datetime', 'filename', 'text']
     # Is a key: options = ['format', 'timezone']
 
     if tpl_config['type'] in types:
-        date_format = '%c'
+        date_format = None
         # Get options if set in _config.yml
         if 'options' in tpl_config:
             if tpl_config['options']['format']:
@@ -148,9 +148,13 @@ def __parse_keyword(tpl_config, filename):
 
         # Return correct value for variable
         if tpl_config['type'] == 'date':
-            return (date.today()).strftime(date_format)
+            return (date.today()).strftime(
+                date_format if date_format is not None else '%x'
+            )
         if tpl_config['type'] == 'datetime':
-            return (datetime.now()).strftime(date_format)
+            return (datetime.now()).strftime(
+                date_format if date_format is not None else '%c'
+            )
         if tpl_config['type'] == 'filename':
             return filename
         if tpl_config['type'] == 'text':
@@ -158,4 +162,4 @@ def __parse_keyword(tpl_config, filename):
     else:
         log.error('Invalid type')
 
-    return 'No value'
+    return 'Not a usable type'
