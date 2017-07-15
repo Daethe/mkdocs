@@ -135,15 +135,19 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
 
 
 def __parse_keyword(tpl_config, filename):
-    keywords = ['filename', 'datetime', 'date']
+    types = ['date', 'datetime', 'filename', 'text']
+    options = ['format']
 
-    if tpl_config in keywords:
-        if tpl_config == 'filename':
+    if tpl_config['type'] in types:
+        date_format = '%c'
+
+        if tpl_config['type'] == 'date':
+            return (date.today()).strftime(date_format)
+        if tpl_config['type'] == 'datetime':
+            return (datetime.now()).strftime(date_format)
+        if tpl_config['type'] == 'filename':
             return filename
-        if tpl_config == 'datetime':
-            return str(datetime.now())
-        if tpl_config == 'date':
-            return str(date.today())
+        if tpl_config['type'] == 'text':
+            return tpl_config['value']
 
-    return tpl_config
-            
+    return 'No value'
