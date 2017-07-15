@@ -186,10 +186,11 @@ def gh_deploy_command(config_file, clean, message, remote_branch, remote_name, f
 
 @cli.command(name="new")
 @click.argument("project_directory")
+@click.option('-t', '--template-directory', type=click.Path(), help=template_directory_help, default=None)
 @common_options
-def new_command(project_directory):
+def new_command(project_directory, template_directory):
     """Create a new MkDocs project"""
-    new.new(project_directory)
+    new.new(project_directory, template_directory)
 
 
 @cli.command(name="add")

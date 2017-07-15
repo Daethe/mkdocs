@@ -24,15 +24,56 @@ For full documentation visit [mkdocs.org](http://mkdocs.org).
         index.md  # The documentation homepage.
         ...       # Other markdown pages, images and other files.
 """
+template_config_text = """# For each template you can use type:
+#    - filename
+#    - datetime
+#    - date
+#    - text
+# With 'datetime' and 'date' type you can use as option:
+#    - format
+
+sample:
+  filename:
+    type: filename
+  datetime:
+    type: datetime
+  datetime_format:
+    type: datetime
+    options:
+      format: '%A %B %Y at %X'
+  date:
+    type: date
+  date_format:
+    type: date
+    options:
+      format: '%x'
+  text:
+    type: text
+    value: "Lorem ipsum dolor sit amet"
+"""
+template_sample_text = """The filename: {{filename}}
+The datetime: {{datetime}}
+The formatted datetime: {{datetime_format}}
+The date: {{date}}
+The formatted date: {{date_format}}
+The text: {{text}}
+"""
 
 log = logging.getLogger(__name__)
 
 
-def new(output_dir):
+def new(output_dir, template_dir_name):
 
     docs_dir = os.path.join(output_dir, 'docs')
     config_path = os.path.join(output_dir, 'mkdocs.yml')
     index_path = os.path.join(docs_dir, 'index.md')
+
+    if template_dir_name is not None:
+        template_dir = os.path.join(output_dir, template_dir_name)
+    else:
+        template_dir = os.path.join(output_dir, '_template')
+    template_config_path = os.path.join(template_dir, '_config.yml')
+    template_sample_path = os.path.join(template_dir, 'sample.md')
 
     if os.path.exists(config_path):
         log.info('Project already exists.')
@@ -52,3 +93,13 @@ def new(output_dir):
     if not os.path.exists(docs_dir):
         os.mkdir(docs_dir)
     io.open(index_path, 'w', encoding='utf-8').write(index_text)
+
+    if not os.path.exists(template_dir):
+        log.info('Creating template directory: %s', template_dir)
+        os.mkdir(template_dir)
+
+    log.info('Writing template config file: %s', template_config_path)
+    io.open(template_config_path, 'w', encoding='utf-8').write(template_config_text)
+
+    log.info('Writing sample template file: %s', template_sample_path)
+    io.open(template_sample_path, 'w', encoding='utf-8').write(template_sample_text)
