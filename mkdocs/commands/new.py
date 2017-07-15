@@ -62,7 +62,7 @@ The text: {{text}}
 log = logging.getLogger(__name__)
 
 
-def new(output_dir, template_dir_name):
+def new(output_dir, template_dir_name=None):
 
     docs_dir = os.path.join(output_dir, 'docs')
     config_path = os.path.join(output_dir, 'mkdocs.yml')

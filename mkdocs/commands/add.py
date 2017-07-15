@@ -62,7 +62,7 @@ def _as_not_file_in_docs_directory(path):
     return True
 
 
-def add(tpl_name, output_dir, filename, create_dir, tpl_dir):
+def add(tpl_name, output_dir, filename, create_dir=True, tpl_dir=None):
     """
         Add a new page with template
     """
