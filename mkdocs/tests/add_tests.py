@@ -83,23 +83,19 @@ class AddTests(unittest.TestCase):
     # Check existance
     def test_check_existance(self):
         """Everything is ok and exist"""
-        self.assertTrue(add._check_existance(
-            '_template',
-            '_template/sample.md',
-            './',
-            './sample.md',
-            True
-        ))
+        self.assertTrue(add._check_existance('_template',
+                                             '_template/sample.md',
+                                             './',
+                                             './sample.md',
+                                             True))
 
     def test_not_check_existance(self):
         """Everything isn't ok"""
-        self.assertFalse(add._check_existance(
-            '_scaffold',
-            '_scaffold/sample.md',
-            './',
-            './sample.md',
-            True
-        ))
+        self.assertFalse(add._check_existance('_scaffold',
+                                              '_scaffold/sample.md',
+                                              './',
+                                              './sample.md',
+                                              True))
 
     # Write file
     @unittest.skip("Need to do some search")
@@ -113,23 +109,21 @@ class AddTests(unittest.TestCase):
             'date_format': {'type': 'date', 'options': {'format': '%A %B %Y'}},
             'text': {'type': 'text', 'value': 'Lorem ipsum dolor sit amet'}
         }
-        add._write_file(
-            '_template/sample.md',
-            'docs/testsample.md',
-            config,
-            'testsample'
-        )
+        add._write_file('_template/sample.md',
+                        'docs/testsample.md',
+                        config,
+                        'testsample')
+
         expect = format("""The filename: testsample
         The datetime: %s
         The formatted datetime: %s
         The date: %s
         The formatted date: %s
         The text: Lorem ipsum dolor sit amet""",
-            (datetime.now()).strftime('%c'),
-            (datetime.now()).strftime('%A %B %Y at %X'),
-            (date.today()).strftime('%x'),
-            (date.today()).strftime('%A %B %Y')
-        )
+                        (datetime.now()).strftime('%c'),
+                        (datetime.now()).strftime('%A %B %Y at %X'),
+                        (date.today()).strftime('%x'),
+                        (date.today()).strftime('%A %B %Y'))
         self.assertEqual(expect, io.open('docs/testsample.md', 'r').read())
 
     # Parse keyword
