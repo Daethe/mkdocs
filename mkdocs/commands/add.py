@@ -90,9 +90,10 @@ def __get_config_file(tpl_dir, tpl_name):
     data = yaml.load(
         io.open(join(tpl_dir, '_config.yml'), 'r')
     )
-    if data.has_key(tpl_name):
+    if tpl_name in data:
         return data[tpl_name]
     return None
+
 
 def __check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
     """
@@ -116,7 +117,7 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
     tpl_value = io.open(tpl_path, 'r', encoding='utf-8').read()
 
     # Test it
-    if not tpl_config is None:
+    if tpl_config is not None:
         var_lists = re.findall(r'{{[A-Za-z0-9\-\_]+}}', tpl_value)
         for var in var_lists:
             var_value = __parse_keyword(
@@ -136,10 +137,14 @@ def __write_file(tpl_path, file_path, tpl_config, filename):
 
 def __parse_keyword(tpl_config, filename):
     types = ['date', 'datetime', 'filename', 'text']
-    options = ['format']
+    # Is a key: options = ['format', 'timezone']
 
     if tpl_config['type'] in types:
         date_format = '%c'
+        # TODO: Options implementation
+        if 'options' in tpl_config:
+            if tpl_config['options']['format']:
+                date_format = tpl_config['options']['format']
 
         if tpl_config['type'] == 'date':
             return (date.today()).strftime(date_format)
@@ -149,5 +154,7 @@ def __parse_keyword(tpl_config, filename):
             return filename
         if tpl_config['type'] == 'text':
             return tpl_config['value']
+    else:
+        log.error('Invalid type')
 
     return 'No value'
