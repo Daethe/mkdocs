@@ -327,6 +327,15 @@ class CLITests(unittest.TestCase):
         self.assertEqual(result.exit_code, 0)
         mock_new.assert_called_once_with('project', None)
 
+    @mock.patch('mkdocs.commands.new.new', autospec=True)
+    def test_new_template_dir(self, mock_new):
+
+        result = self.runner.invoke(
+            cli.cli, ["new", "project", "--template-directory", "_tpl"], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_new.assert_called_once_with('project', '_tpl')
+
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
     @mock.patch('mkdocs.commands.gh_deploy.gh_deploy', autospec=True)
@@ -465,3 +474,32 @@ class CLITests(unittest.TestCase):
         self.assertEqual(g_kwargs['force'], True)
         self.assertEqual(mock_build.call_count, 1)
         self.assertEqual(mock_load_config.call_count, 1)
+
+    @mock.patch('mkdocs.commands.add.add', autospec=True)
+    def test_add(self, mock_add):
+
+        result = self.runner.invoke(
+            cli.cli, ['add', 'sample', './', 'testsample'], catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_add.assert_called_once_with('sample', './', 'testsample', True, None)
+
+    @mock.patch('mkdocs.commands.add.add', autospec=True)
+    def test_add_create_directory(self, mock_add):
+
+        result = self.runner.invoke(
+            cli.cli, ['add', 'sample', './', 'testsample', '--create-directory'],
+            catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_add.assert_called_once_with('sample', './', 'testsample', False, None)
+
+    @mock.patch('mkdocs.commands.add.add', autospec=True)
+    def test_add_template_directory(self, mock_add):
+
+        result = self.runner.invoke(
+            cli.cli, ['add', 'sample', './', 'testsample', '--template-directory', '_templatetest'],
+            catch_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_add.assert_called_once_with('sample', './', 'testsample', True, '_templatetest')
