@@ -16,13 +16,16 @@ class NewTests(unittest.TestCase):
         tempdir = tempfile.mkdtemp()
         os.chdir(tempdir)
 
-        new.new("myproject")
+        new.new("myproject", None)
 
         expected_paths = [
             os.path.join(tempdir, "myproject"),
             os.path.join(tempdir, "myproject", "mkdocs.yml"),
             os.path.join(tempdir, "myproject", "docs"),
             os.path.join(tempdir, "myproject", "docs", "index.md"),
+            os.path.join(tempdir, "myproject", "_template"),
+            os.path.join(tempdir, "myproject", "_template", "_config.yml"),
+            os.path.join(tempdir, "myproject", "_template", "sample.md")
         ]
 
         for expected_path in expected_paths:
