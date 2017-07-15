@@ -325,7 +325,16 @@ class CLITests(unittest.TestCase):
             cli.cli, ["new", "project"], catch_exceptions=False)
 
         self.assertEqual(result.exit_code, 0)
-        mock_new.assert_called_once_with('project')
+        mock_new.assert_called_once_with('project', None)
+
+    @mock.patch('mkdocs.commands.add.add', autospec=True)
+    def test_add(self, mock_add):
+
+        result = self.runner.invoke(
+            cli.cli, ["add", "sample", "./", "sample-file"], cach_exceptions=False)
+
+        self.assertEqual(result.exit_code, 0)
+        mock_add.assert_called_once_with('sample', './', 'sample-file', None, None)
 
     @mock.patch('mkdocs.config.load_config', autospec=True)
     @mock.patch('mkdocs.commands.build.build', autospec=True)
