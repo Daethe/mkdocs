@@ -11,7 +11,7 @@ import yaml
 
 
 # Define some directory
-scaffold_dir = join(getcwd(), '_scaffold')
+scaffold_dir = join(getcwd(), '_template')
 config_path = join(getcwd(), 'mkdocs.yml')
 
 # Get log object
@@ -64,7 +64,7 @@ def _as_not_file_in_docs_directory(path):
 
 def add(tpl_name, output_dir, filename, create_dir, tpl_dir):
     """
-        Add a new page with scaffolded template
+        Add a new page with template
     """
 
     # Check if directory is a mkdocs project
@@ -141,11 +141,12 @@ def __parse_keyword(tpl_config, filename):
 
     if tpl_config['type'] in types:
         date_format = '%c'
-        # TODO: Options implementation
+        # Get options if set in _config.yml
         if 'options' in tpl_config:
             if tpl_config['options']['format']:
                 date_format = tpl_config['options']['format']
 
+        # Return correct value for variable
         if tpl_config['type'] == 'date':
             return (date.today()).strftime(date_format)
         if tpl_config['type'] == 'datetime':
