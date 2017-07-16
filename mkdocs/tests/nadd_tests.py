@@ -8,7 +8,6 @@ import unittest
 from datetime import date, datetime
 import os
 import tempfile
-import yaml
 
 from mkdocs.commands import add, new
 
@@ -28,7 +27,8 @@ class AddTests(unittest.TestCase):
         )
 
         # Append new conf to config file
-        yaml_conf = """test:
+        yaml_conf = """
+        test:
           filename:
             type: filename
           datetime:
