@@ -28,12 +28,15 @@ class AddTests(unittest.TestCase):
         )
 
         # Append new conf to config file
-        yaml_conf = yaml.dump({'test': {
-            'filename': {'type': 'filename'},
-            'datetime': {'type': 'datetime', 'options': {'format': '%A %B %Y at %X'}}
-        }}, allow_unicode=True)
-        io.open('_template/_config.yml', 'a', encoding='utf-8').write(
-            yaml_conf.decode(encoding='utf-8'))
+        yaml_conf = """test:
+          filename:
+            type: filename
+          datetime:
+            type: datetime
+            options:
+              format: '%A %B %Y at %X'
+        """
+        io.open('_template/_config.yml', 'a', encoding='utf-8').write(yaml_conf)
 
     def test_add(self):
         expect = """testadd created at {0}""".format((datetime.now()).strftime('%A %B %Y at %X'))
