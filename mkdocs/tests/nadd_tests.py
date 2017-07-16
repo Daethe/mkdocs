@@ -23,12 +23,17 @@ class AddTests(unittest.TestCase):
         os.chdir("myproject")
 
         # Setup config for test
-        io.open('_template/test.md', 'w').write(u"{{filename}} created at {{datetime}}")
+        io.open('_template/test.md', 'w', encoding='utf-8').write(
+            "{{filename}} created at {{datetime}}"
+        )
+
+        # Append new conf to config file
         yaml_conf = yaml.dump({'test': {
             'filename': {'type': 'filename'},
             'datetime': {'type': 'datetime', 'options': {'format': '%A %B %Y at %X'}}
-        }})
-        io.open('_template/_config.yml', 'a').write(unicode(yaml_conf))
+        }}, allow_unicode=True)
+        io.open('_template/_config.yml', 'a', encoding='utf-8').write(
+            yaml_conf.decode(encoding='utf-8'))
 
     def test_add(self):
         expect = """testadd created at {0}""".format((datetime.now()).strftime('%A %B %Y at %X'))
