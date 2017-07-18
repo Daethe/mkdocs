@@ -11,8 +11,8 @@ import yaml
 
 
 # Define some directory
-scaffold_dir = '_template'
-config_path = 'mkdocs.yml'
+scaffold_dir = join(getcwd(), '_template')
+config_path = join(getcwd(), 'mkdocs.yml')
 
 # Get log object
 log = logging.getLogger(__name__)
