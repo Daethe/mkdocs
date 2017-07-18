@@ -76,7 +76,7 @@ def add(tpl_name, output_dir, filename, create_dir=True, tpl_dir=None):
         else:
             tpl_dir = scaffold_dir
         tpl_path = join(tpl_dir, str(tpl_name) + '.md')
-        output_dir = join('docs', output_dir)
+        output_dir = join(getcwd(), 'docs', output_dir)
         file_path = join(output_dir, str(filename) + '.md')
 
         if _check_existance(tpl_dir, tpl_path, output_dir, file_path, create_dir):
