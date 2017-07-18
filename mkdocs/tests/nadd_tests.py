@@ -27,8 +27,7 @@ class AddTests(unittest.TestCase):
         )
 
         # Append new conf to config file
-        yaml_conf = """
-        test:
+        yaml_conf = """test:
           filename:
             type: filename
           datetime:
