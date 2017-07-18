@@ -40,7 +40,7 @@ class AddTests(unittest.TestCase):
     def test_add(self):
         expect = """testadd created at {0}""".format((datetime.now()).strftime('%A %B %Y at %X'))
         add.add('test', './', 'testadd')
-        self.assertEqual(io.open('docs/testadd.md', 'r').read(), expect)
+        self.assertEqual(io.open(os.path.join(os.getcwd(), 'docs', 'testadd.md'), 'r').read(), expect)
 
     # Is current working directory a mkdocs project
     def test_is_cwd_mkdocs_project(self):
